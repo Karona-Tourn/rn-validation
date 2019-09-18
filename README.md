@@ -57,7 +57,7 @@ import { ValidationGroup, Validator, ValidationRules } from 'rn-validation';
   </Validator>
 </ValidationGroup>;
 
-// Call the method to show the popup modal
+// Call the method to start validating all validators inside the group
 _validation.validate();
 ```
 
