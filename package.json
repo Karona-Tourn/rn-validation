@@ -1,0 +1,34 @@
+{
+  "name": "rn-validation",
+  "version": "1.0.0",
+  "description": "Help working with validations",
+  "typings": "typings/index.d.ts",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Karona-Tourn/rn-validation.git"
+  },
+  "keywords": [
+    "rn-vaidations",
+    "react-validations",
+    "react-native-validations",
+    "validations",
+    "validating",
+    "react-native-validating"
+  ],
+  "author": "Karona Tourn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Karona-Tourn/rn-validation/issues"
+  },
+  "homepage": "https://github.com/Karona-Tourn/rn-validation#readme",
+  "peerDependencies": {
+    "react": "^16.6.0"
+  },
+  "dependencies": {
+    "prop-types": "^15.7.2"
+  }
+}
