@@ -63,7 +63,7 @@
     "prettier": "^2.0.5",
     "react": "16.11.0",
     "react-native": "0.62.2",
-    "release-it": "^13.5.8",
+    "release-it": "^13.7.1",
     "typescript": "^3.8.3"
   },
   "peerDependencies": {
@@ -90,11 +90,13 @@
   },
   "release-it": {
     "git": {
+      "requireCleanWorkingDir": false,
       "commitMessage": "chore: release ${version}",
       "tagName": "v${version}"
     },
     "npm": {
-      "publish": true
+      "publish": true,
+      "ignoreVersion": true
     },
     "github": {
       "release": true
@@ -103,6 +105,9 @@
       "@release-it/conventional-changelog": {
         "preset": "angular"
       }
+    },
+    "publishConfig": {
+      "access": "public"
     }
   },
   "eslintConfig": {
