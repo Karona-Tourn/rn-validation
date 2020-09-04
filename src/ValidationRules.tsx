@@ -143,7 +143,7 @@ function isEmail(value: string) {
 }
 
 function isNotEmptyTrim(value: any) {
-  return !isNotNullUndefined(value) && isEmptyWithTrim(value);
+  return isNotNullUndefined(value) && !isEmptyWithTrim(value);
 }
 
 const ValidationRules = {
