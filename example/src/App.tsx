@@ -1,23 +1,30 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
-import React from 'react';
+import React, { createRef } from 'react';
 import { SafeAreaView, StyleSheet, Button, View, Alert } from 'react-native';
-import { ValidationGroup, ValidationRules } from '../src';
+import {
+  ValidationGroup,
+  ValidationRules,
+  ValidationResult,
+} from 'rn-validation';
 import AppTextInput from './AppTextInput';
 
-class App extends React.Component {
-  constructor(props) {
+type AppProps = {};
+
+type AppState = {
+  username?: string;
+  password?: string;
+};
+
+class App extends React.Component<AppProps, AppState> {
+  private _validation: React.RefObject<ValidationGroup>;
+
+  constructor(props: Readonly<AppProps>) {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
     };
+
+    this._validation = createRef<ValidationGroup>();
   }
 
   render() {
@@ -25,33 +32,34 @@ class App extends React.Component {
       <SafeAreaView style={styles.container}>
         <View style={styles.innerContainer}>
           <ValidationGroup
-            ref={ref => (this._group = ref)}
-            onValidated={this._onValidated}>
+            ref={this._validation}
+            onValidated={this._onValidated}
+          >
             <AppTextInput
               value={this.state.username}
-              onChangeText={username => this.setState({ username })}
+              onChangeText={(username) => this.setState({ username })}
               placeholder="Enter your username"
               validations={[
                 ValidationRules.isNotEmpty,
-                ValidationRules.isLengthLessThanOrEqualTo(20)
+                ValidationRules.isLengthLessThanOrEqualTo(20),
               ]}
               errorMessages={[
                 'Field cannot be empty',
-                'Username length cannot exceed 20'
+                'Username length cannot exceed 20',
               ]}
             />
             <AppTextInput
               secureTextEntry
               value={this.state.password}
-              onChangeText={password => this.setState({ password })}
+              onChangeText={(password) => this.setState({ password })}
               placeholder="Enter your password"
               validations={[
                 ValidationRules.isNotEmpty,
-                ValidationRules.isLengthLessThanOrEqualTo(6)
+                ValidationRules.isLengthLessThanOrEqualTo(6),
               ]}
               errorMessages={[
                 'Password cannot be empty',
-                'Password length cannot exceed 6'
+                'Password length cannot exceed 6',
               ]}
             />
           </ValidationGroup>
@@ -62,10 +70,10 @@ class App extends React.Component {
     );
   }
 
-  _onValidated = ({ validated, validatedErrors }) => {
+  _onValidated = ({ validated, validatedErrors }: ValidationResult) => {
     if (validated) {
-      alert('Validated!');
-    } else {
+      Alert.alert('', 'Validated!');
+    } else if (validatedErrors != null) {
       Alert.alert('Invalid', validatedErrors[0].firstValidatedErrorMessage, [
         {
           text: 'OK',
@@ -73,26 +81,26 @@ class App extends React.Component {
             requestAnimationFrame(() => {
               validatedErrors[0].extraData.input.focus();
             });
-          }
-        }
+          },
+        },
       ]);
     }
   };
 
   _onSubmitPressed = () => {
-    this._group.validate();
+    this._validation.current && this._validation.current.validate();
   };
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   innerContainer: {
     flex: 1,
-    padding: 20
-  }
+    padding: 20,
+  },
 });
 
 export default App;

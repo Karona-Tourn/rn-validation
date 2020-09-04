@@ -1,14 +1,38 @@
 import React from 'react';
 import { ValidationGroupContext } from './ValidationGroup';
-import PropTypes from 'prop-types';
 
-export default class Validator extends React.Component {
-  constructor(props) {
+type Result = {
+  validated: boolean;
+  extraData?: any;
+  firstValidatedErrorMessage?: string;
+  validatedErrorMessages?: string[];
+};
+
+type ValidationFunction = (value: any) => boolean;
+
+export interface ValidatorProps {
+  validations?: ValidationFunction[];
+  getValidatedValue?: () => any;
+  children?: (result: Result) => JSX.Element;
+  errorMessages: string[];
+  getExtraDataAfterValidating?: () => any;
+}
+
+interface ValidatorState {
+  validated: boolean;
+  validatedErrorMessages: string[];
+}
+
+export default class Validator extends React.Component<
+  ValidatorProps,
+  ValidatorState
+> {
+  constructor(props: Readonly<ValidatorProps>) {
     super(props);
 
     this.state = {
       validated: true,
-      validatedErrorMessages: []
+      validatedErrorMessages: [],
     };
   }
 
@@ -20,9 +44,9 @@ export default class Validator extends React.Component {
     this.context.deattachValidator(this);
   }
 
-  _getValidatedResult() {
+  _getValidatedResult(): Result {
     const { validated, validatedErrorMessages } = this.state;
-    const result = { validated };
+    const result: Result = { validated };
 
     if (!result.validated && validatedErrorMessages.length > 0) {
       result.firstValidatedErrorMessage = validatedErrorMessages[0];
@@ -42,14 +66,15 @@ export default class Validator extends React.Component {
     return null;
   }
 
-  validate() {
-    return new Promise((resolve, reject) => {
+  validate(): Promise<Result> {
+    return new Promise((resolve: (value?: Result) => void) => {
       const {
         validations,
         getValidatedValue,
         errorMessages,
-        getExtraDataAfterValidating
+        getExtraDataAfterValidating,
       } = this.props;
+
       const extraData = getExtraDataAfterValidating
         ? getExtraDataAfterValidating()
         : undefined;
@@ -57,12 +82,12 @@ export default class Validator extends React.Component {
       if (!validations || !getValidatedValue) {
         return resolve({
           validated: true,
-          extraData
+          extraData,
         });
       }
 
       const errorMessageCount = errorMessages ? errorMessages.length : 0;
-      const validatedErrorMessages = [];
+      const validatedErrorMessages: string[] = [];
       let validated = true;
 
       validations.forEach((v, i) => {
@@ -86,23 +111,3 @@ export default class Validator extends React.Component {
  * --------------------------------------------------------------------------
  */
 Validator.contextType = ValidationGroupContext;
-
-/**
- * Prop types
- * --------------------------------------------------------------------------
- */
-Validator.propTypes = {
-  validations: PropTypes.arrayOf(PropTypes.func).isRequired,
-  getValidatedValue: PropTypes.func.isRequired,
-  children: PropTypes.func.isRequired,
-  errorMessages: PropTypes.arrayOf(PropTypes.string)
-};
-
-/**
- * Default props
- * --------------------------------------------------------------------------
- */
-Validator.defaultProps = {
-  validations: [],
-  errorMessages: []
-};

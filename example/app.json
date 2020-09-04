@@ -1,0 +1,22 @@
+{
+  "name": "rn-validation-example",
+  "displayName": "RnValidation Example",
+  "expo": {
+    "name": "rn-validation-example",
+    "slug": "rn-validation-example",
+    "description": "Example app for rn-validation",
+    "privacy": "public",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

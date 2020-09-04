@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import {
   Text,
   View,
@@ -6,15 +6,23 @@ import {
   StyleProp,
   ViewStyle,
   StyleSheet,
-  TextInput
+  TextInput,
 } from 'react-native';
-import { ValidatorProps, Validator } from '../src';
+import { ValidatorProps, Validator } from 'rn-validation';
 
 interface AppTextInputProps extends TextInputProps, ValidatorProps {
   containerStyle?: StyleProp<ViewStyle> | null;
 }
 
 export default class AppTextInput extends Component<AppTextInputProps> {
+  private _input: React.RefObject<TextInput>;
+
+  constructor(props: Readonly<AppTextInputProps>) {
+    super(props);
+
+    this._input = createRef<TextInput>();
+  }
+
   render() {
     const {
       getValidatedValue,
@@ -31,19 +39,21 @@ export default class AppTextInput extends Component<AppTextInputProps> {
         getValidatedValue={() => value}
         validations={validations}
         errorMessages={errorMessages}
-        getExtraDataAfterValidating={() => ({ input: this })}>
+        getExtraDataAfterValidating={() => ({ input: this })}
+      >
         {({ validated, firstValidatedErrorMessage }) => {
           return (
             <View
-              style={[styles.container, StyleSheet.flatten(containerStyle)]}>
+              style={[styles.container, StyleSheet.flatten(containerStyle)]}
+            >
               <TextInput
-                ref={this._ref}
+                ref={this._input}
                 value={value}
                 {...restProps}
                 style={[
                   styles.input,
                   { borderColor: validated ? 'grey' : 'red' },
-                  style
+                  style,
                 ]}
               />
               {validated ? null : (
@@ -58,25 +68,23 @@ export default class AppTextInput extends Component<AppTextInputProps> {
     );
   }
 
-  _ref = ref => (this._input = ref);
-
   focus() {
-    this._input.focus();
+    this._input.current && this._input.current.focus();
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10
+    marginBottom: 10,
   },
   input: {
     borderWidth: StyleSheet.hairlineWidth,
     height: 50,
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
   },
   errorText: {
     color: 'red',
     fontSize: 14,
-    marginTop: 10
-  }
+    marginTop: 10,
+  },
 });

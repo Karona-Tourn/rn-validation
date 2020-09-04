@@ -1,6 +1,6 @@
-# **rn-validation**
+# rn-validation
 
-Help validating any value
+Supporting component helping validating values
 
 ## Features
 
@@ -10,39 +10,42 @@ Help validating any value
 
 ## Installation
 
-- Using **Npm**
-
-```bash
-npm install rn-validation --save
+```sh
+npm install rn-validation
 ```
 
-- Using **Yarn**
+or
 
-```bash
+```sh
 yarn add rn-validation
 ```
 
-## Example
+## Usage
 
-```jsx
+```js
+import { createRef } from 'react';
 import { ValidationGroup, Validator, ValidationRules } from 'rn-validation';
 
+const validation = createRef();
+
 <ValidationGroup
-  ref={ref => (_validation = ref)}
+  ref={validation}
   onValidated={({ validated, validatedErrors }) => {
     if (validated) {
       alert('Validated successfully!');
     } else {
       alert(validatedErrors[0].firstValidatedErrorMessage);
     }
-  }}>
+  }}
+>
   <Validator
     getValidatedValue={() => value}
     validations={[
       ValidationRules.isNotEmpty,
-      ValidationRules.isLengthLessThanOrEqualTo(20)
+      ValidationRules.isLengthLessThanOrEqualTo(20),
     ]}
-    errorMessages={['Cannot be empty', 'Value length cannot exceed 20']}>
+    errorMessages={['Cannot be empty', 'Value length cannot exceed 20']}
+  >
     {({ validated, firstValidatedErrorMessage }) => {
       return (
         <View>
@@ -58,10 +61,8 @@ import { ValidationGroup, Validator, ValidationRules } from 'rn-validation';
 </ValidationGroup>;
 
 // Call the method to start validating all validators inside the group
-_validation.validate();
+validation.current.validate();
 ```
-
-## Usage
 
 ### **ValidationGroup**
 
@@ -113,6 +114,10 @@ _validation.validate();
 - isEmail
 - isNotEmptyTrim
 
+## Contributing
+
+See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+
 ## License
 
-- [MIT](LICENSE)
+MIT
