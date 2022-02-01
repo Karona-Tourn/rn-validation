@@ -12,8 +12,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "expo": "^38.0.0",
-    "expo-splash-screen": "^0.6.0",
+    "expo": "^40.0.0",
+    "expo-splash-screen": "^0.10.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "0.62.2",
